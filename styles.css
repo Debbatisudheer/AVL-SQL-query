@@ -67,4 +67,9 @@ thead th {
     button {
         margin-top: 20px; /* Increased space between input and button */
     }
+    pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
 }
