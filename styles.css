@@ -57,6 +57,11 @@ thead th {
     top: 0;
     background-color: #fff;
 }
+pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
 
 /* Responsive adjustments */
 @media screen and (max-width: 600px) {
