@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Database</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Database</h1>
+        <p>AVL trees are used for indexing and efficient retrieval of records. They ensure balanced tree structure, which helps in faster searches.</p>
+        <p>Executing SQL-like queries, specifically "SELECT * FROM employees", to retrieve employee records.</p>
+        <input type="text" id="queryInput" placeholder="Enter an SQL-like query (e.g., SELECT * FROM employees)">
+        <button onclick="executeQuery()">Execute</button>
+        <div id="errorMessages"></div>
+        <div id="queryResult"></div>
+    </div>
+     <p>
+            Initial State:
+            Initially, the AVL tree is empty.
+        </p>
+        <pre>
+          (Empty AVL Tree)
+                 []
+        </pre>
+        <p>
+            Insertion of Employees:
+            Employees are inserted into the AVL tree using their IDs as keys.
+        </p>
+        <pre>
+           (AVL Tree with IDs as Keys)
+                     20A1
+                    /     \
+                20A2       20B1
+                               \
+                               20C2
+        </pre>
+        <p>
+            For the provided data, the AVL tree will look like the above after inserting the employees.
+        </p>
+        <p>
+            Balancing Operations:
+            AVL tree performs balancing operations (rotations) to maintain balance after each insertion. These rotations ensure that the tree remains height-balanced.
+        </p>
+        <p>
+            Searching by ID:
+            When searching for an employee by ID, the AVL tree is traversed starting from the root. Depending on the comparison of the target ID with the current node's ID, the search continues either to the left or right subtree.
+        </p>
+        <p>
+            Example Search:
+            If we want to find an employee with ID "20B1":
+            We start at the root ("20A1").
+            Since "20B1" is greater than "20A1", we move to the right subtree.
+            Since "20B1" is less than "20B1", we move to the left subtree.
+            We find "20B1" in the left subtree.
+        </p>
+        <pre>
+           (AVL Tree with IDs as Keys)
+                     20A1
+                    /     \
+                20A2       20B1
+                               \
+                               20C2
+        </pre>
+        <p>
+            Result:
+            The AVL tree efficiently organizes employee records by their IDs, allowing for quick retrieval based on ID values. The tree remains balanced, ensuring that search operations have a time complexity of O(log n), where n is the number of nodes in the tree.
+        </p>
+    </div>
+
+        <h1>Database Explanation</h1>
+        <pre>
+class Database:
+    def __init__(self):
+        self.employee_table = []  # List to store employee records
+        self.id_index = AVLTree()  # AVL tree for indexing employees by ID
+
+    def insert_employee(self, employee):
+        self.employee_table.append(employee)  # Add employee record to the list
+        self.id_index.insert(employee.id, employee)  # Index the employee by ID using AVL tree
+
+    def execute_query(self, sql_query):
+        if sql_query == "SELECT * FROM employees":
+            # If the query is to select all employees, return details of all employees
+            return [[employee.id, employee.name, employee.age, employee.email, employee.area, employee.country]
+                    for employee in self.employee_table]
+        elif sql_query.startswith("SELECT * FROM employees WHERE id = "):
+            try:
+                # Extract the employee ID from the query
+                id = sql_query.split("id = ")[1]
+                # Search for the employee by ID in the AVL tree index
+                employee = self.id_index.search_by_id(id)
+                if employee:
+                    # If employee found, return their details
+                    return [[employee.id, employee.name, employee.age, employee.email, employee.area, employee.country]]
+                else:
+                    return "No employee found with the specified ID."
+            except IndexError:
+                return "Invalid query format. Please provide a valid ID."
+        else:
+            return "Invalid SQL query"
+        </pre>
+     <ul>
+            <li>
+                Initialization:<br>
+                When we create a new database, it starts with an empty list of employees (employee_table) and an empty AVL tree (id_index).
+            </li>
+            <li>
+                Inserting Employees:<br>
+                Whenever we add a new employee to the database, we put their information in the list of employees (employee_table).
+                We also keep track of this employee's information by their unique ID in the AVL tree (id_index). This helps us quickly find employees by their IDs later.
+            </li>
+            <li>
+                Executing Queries:<br>
+                If someone wants to see all the employees in the database, they can ask with a query like "SELECT * FROM employees".
+                In response, we gather all the employee information from the list and give it back.<br>
+                If someone wants to find a specific employee by their ID, they can ask with a query like "SELECT * FROM employees WHERE id = <employee_id>".
+                We look up this ID in our AVL tree to quickly find the corresponding employee's information and give it back.<br>
+                If the query is not understood or the ID provided doesn't match any employee, we tell them there's a problem.
+            </li>
+            <li>
+                So, the database keeps a list of employees and also sorts them by their IDs for quick access when needed. When asked for specific information, it quickly finds and returns the requested details.
+            </li>
+        </ul>
+    </div>
+      <h1>Database Structure</h1>
+        <pre>
+            +-------------+
+            |  Database   |
+            +-------------+
+                  |
+     +--------------------------------+
+     |                                |
+  +------------------+              +------------------+
+  |   Employee 1     |              |   Employee 2     |
+  +------------------+              +------------------+
+  |  ID: 20A1        |              |  ID: 20A2        |
+  |  Name: Sudheer   |              |  Name: Suddhu    |
+  |  Age: 21         |              |  Age: 22         |
+  |  Email: ...      |              |  Email: ...      |
+  |  Area: Area1     |              |  Area: Area2     |
+  |  Country: India  |              |  Country: India  |
+  +------------------+              +------------------+
+            |                                |
+  +------------------+              +------------------+
+  |   Employee 3     |              |   Employee 4     |
+  +------------------+              +------------------+
+  |  ID: 20B1        |              |  ID: 20C2        |
+  |  Name: Charlie   |              |  Name: Sudhir    |
+  |  Age: 23         |              |  Age: 24         |
+  |  Email: ...      |              |  Email: ...      |
+  |  Area: Area3     |              |  Area: Area4     |
+  |  Country: USA    |              |  Country: India  |
+  +------------------+              +------------------+
+        </pre>
+     <h1>AVL Tree Rotation Explanation</h1>
+        <pre>
+            let's consider the AVL tree before and after a rotation to understand the balance property.
+
+            Before Rotation (Imbalanced Tree):
+
+                                        20A2 (Suddhu)       <-- Imbalanced node with balance factor 2
+                                         /         \
+                            20A1 (Sudheer)        20C2 (Sudhir)
+                                                        \
+                                                    20B1 (Charlie)
+
+            In this tree, Node 20A2 (Suddhu) has a balance factor of 2, indicating that its right subtree is two levels deeper than its left subtree. This violates the AVL tree property, making the tree unbalanced.
+
+            After Rotation (Balanced Tree):
+
+            After performing a left rotation on Node 20A2, the tree becomes balanced:
+
+                                       20A1 (Sudheer)        <-- Balanced node with balance factor 0
+                                      /             \
+                                 20C2 (Sudhir)  20A2 (Suddhu)
+                                                          \
+                                                        20B1 (Charlie)
+
+            Now, Node 20A1 (Sudheer) becomes the root of the subtree, and both its left and right subtrees have the same height, resulting in a balance factor of 0. This satisfies the AVL tree balance property.
+
+            Rotation operations are performed to maintain the balance property of the AVL tree, ensuring efficient search, insertion, and deletion operations.
+
+            To determine whether a tree is balanced or not, we need to calculate the balance factor for each node. The balance factor is defined as the difference between the height of the left subtree and the height of the right subtree. Here's how you can calculate it:
+
+                Calculate the Height of the Subtrees:
+                    Traverse down the left subtree and count the number of levels (height).
+                    Traverse down the right subtree and count the number of levels (height).
+
+                Calculate the Balance Factor:
+                    Subtract the height of the left subtree from the height of the right subtree.
+
+                Determine Balance:
+                    If the balance factor is -1, 0, or 1, the node is balanced.
+                    If the balance factor is greater than 1 or less than -1, the node is unbalanced.
+
+            Let's apply this to the example:
+
+            For Node 20A2 (Suddhu):
+
+                Calculate Height:
+                    Height of the left subtree = 1 (Node 20A1)
+                    Height of the right subtree = 3 (Node 20C2 -> Node 20B1 -> Node 20C2)
+
+                Calculate Balance Factor:
+                    Balance Factor = Height of the right subtree - Height of the left subtree
+                    = 3 - 1
+                    = 2
+
+                Determine Balance:
+                    Balance Factor = 2, indicating that the right subtree is two levels deeper than the left subtree, making the node unbalanced.
+
+            Based on this calculation, Node 20A2 is unbalanced.
+
+            To balance the AVL tree, we need to perform rotations. In this case, we'll perform a right rotation to balance Node 20A2. Here's how it's done:
+
+            To perform the rotation and balance the tree, we need to update the heights of the affected nodes and check for balance factors. Let's go through the calculation step by step:
+
+                Before Rotation:
+                    Node 20A2 (Suddhu): Height = 3
+                    Node 20A1 (Sudheer): Height = 1
+                    Node 20C2 (Sudhir): Height = 2
+                    Node 20B1 (Charlie): Height = 0
+
+                Calculating Balance Factors:
+                    For Node 20A2 (Suddhu): Balance Factor = 3 - 1 = 2 (Unbalanced)
+
+                Performing Rotation:
+                    Since Node 20A2 (Suddhu) is unbalanced, we perform a right rotation.
+
+                After Rotation:
+                    Node 20A1 (Sudheer) becomes the new root.
+                    Node 20A2 (Suddhu) becomes the right child of 20A1.
+                    The right subtree of Node 20A1 remains the same.
+
+                Updated Heights:
+                    Node 20A1 (Sudheer): Height = max(1, 3) + 1 = 4
+                    Node 20A2 (Suddhu): Height = max(0, 2) + 1 = 3
+                    Node 20C2 (Sudhir) and Node 20B1 (Charlie) remain the same.
+
+                Final Balanced Tree:
+
+                                20A1 (Sudheer)
+                                /            \
+                     20A2 (Suddhu)           20C2 (Sudhir)
+                                                    \
+                                                  20B1 (Charlie)
+
+            Now the tree is balanced, and each node's balance factor is within the range [-1, 1]. This ensures that the AVL property is maintained, and the tree is ready for further operations. Let me know if you need more clarification!
+        </pre>
+     <h1>Time Complexity of AVL Tree Operations</h1>
+        <ul>
+            <li>
+                <strong>Before Rotation:</strong>
+                <ul>
+                    <li>Insertion: O(log n)</li>
+                    <li>Deletion: O(log n)</li>
+                    <li>Search: O(log n)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>After Rotation:</strong>
+                <ul>
+                    <li>
+                        After rotation, the time complexity remains the same as before: O(log n).
+                    </li>
+                    <li>
+                        Although rotation operations are performed, they are constant-time operations that do not significantly affect the overall time complexity of tree operations.
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    <h1>AVL Tree Balancing</h1>
+        <ul>
+            <li>
+                <strong>Binary Search Tree (BST):</strong>
+                <ul>
+                    <li>A binary search tree is a data structure where each node has at most two children (left and right).</li>
+                    <li>For each node:
+                        <ul>
+                            <li>All elements in the left subtree are less than the node's value.</li>
+                            <li>All elements in the right subtree are greater than the node's value.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>Unbalanced Trees:</strong>
+                <ul>
+                    <li>When elements are added or removed from a binary search tree without any balancing mechanism, it may lead to a situation where the tree becomes unbalanced.</li>
+                    <li>An unbalanced tree can have uneven height distribution, affecting the performance of operations like insertion, deletion, and search.</li>
+                    <li>In the worst case, the time complexity of these operations can degrade to O(n), where n is the number of elements in the tree.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Balanced Trees:</strong>
+                <ul>
+                    <li>Balanced trees are binary search trees where the heights of the left and right subtrees of every node differ by at most one.</li>
+                    <li>This ensures that the tree remains relatively balanced, enabling efficient operations with a logarithmic time complexity.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>AVL Trees:</strong>
+                <ul>
+                    <li>AVL trees are a type of balanced binary search tree where the height difference between the left and right subtrees of any node is always less than or equal to 1.</li>
+                    <li>AVL trees maintain this balance by performing rotations when necessary during insertion and deletion operations.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Example AVL Tree:</strong>
+                <ul>
+                    <li>
+                        <pre>
+        15
+       /  \
+      10   20
+     /  \    \
+    5   12   25
+   /
+  3
+                        </pre>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>Insertion of Number 3:</strong>
+                <ul>
+                    <li>After inserting 3, the tree becomes unbalanced because the left subtree of node 10 is significantly taller than the right subtree.</li>
+                    <li>Restoring balance requires performing rotations.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Rotations to Restore Balance:</strong>
+                <ul>
+                    <li>Performing a right rotation around node 10 balances the tree.</li>
+                    <li>After rotation:
+                        <pre>
+      15
+     /  \
+    5    20
+   / \     \
+  3  10    25
+     / \
+    5   12
+                        </pre>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>Checking Balance Factor:</strong>
+                <ul>
+                    <li>We calculate the balance factor for each node in the tree to ensure balance.</li>
+                    <li>Nodes with a balance factor outside the range of -1, 0, or 1 are considered unbalanced.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Criteria for Balanced Trees:</strong>
+                <ul>
+                    <li>Balance Factor: Ensure the balance factor of every node is within the acceptable range.</li>
+                    <li>Rotations: Perform rotations to restore balance when necessary.</li>
+                    <li>Recursive Balancing: Balance the tree recursively from bottom to top.</li>
+                    <li>Insertion and Deletion: Maintain balance during insertion and deletion operations.</li>
+                    <li>Keep Track of Heights: Maintain accurate height information for each node.</li>
+                </ul>
+            </li>
+        </ul>
+    <h1>Applications of AVL Trees</h1>
+        <ul>
+            <li>
+                <strong>Databases:</strong>
+                <ul>
+                    <li>AVL trees are used in database systems to implement indexes, improving query performance by allowing fast retrieval of data based on indexed columns.</li>
+                    <li>Examples include databases like PostgreSQL and SQLite, which use AVL trees in their B-tree indexes.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>File Systems:</strong>
+                <ul>
+                    <li>AVL trees are used in file systems to maintain directory structures and quickly locate files based on their names or paths.</li>
+                    <li>They aid in efficiently navigating and organizing files and directories.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Compiler Design:</strong>
+                <ul>
+                    <li>AVL trees are used in compiler design for symbol tables, which store information about identifiers (variables, functions, etc.) used in a program and their attributes.</li>
+                    <li>They facilitate quick searching and updating of the symbol table during compilation.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Caching Mechanisms:</strong>
+                <ul>
+                    <li>AVL trees are used in caching mechanisms, such as in web servers, to store frequently accessed data.</li>
+                    <li>They assist in quick retrieval of cached data and efficient management of cache eviction policies.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Network Routing:</strong>
+                <ul>
+                    <li>AVL trees are used in network routing algorithms to maintain routing tables efficiently.</li>
+                    <li>They aid in quickly finding the best route for forwarding packets in computer networks.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Database Management Systems (DBMS):</strong>
+                <ul>
+                    <li>AVL trees are used in DBMS for maintaining indexes on database tables, improving query performance by facilitating fast retrieval of records based on indexed columns.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Language Libraries:</strong>
+                <ul>
+                    <li>AVL trees are implemented in various programming language libraries and frameworks as part of their standard collections or data structure libraries.</li>
+                    <li>For example, the std::map container in C++ STL implements a red-black tree, which is similar to an AVL tree, to store key-value pairs with ordered keys.</li>
+                </ul>
+            </li>
+        </ul>
+     <h1>AVL Trees in Database Management Systems (DBMS)</h1>
+        <p>Certainly! In a Database Management System (DBMS), AVL trees are used to create indexes on database tables. These indexes help improve the performance of database queries by making it faster to find specific records based on the values in certain columns.</p>
+        <h2>Let's break it down:</h2>
+        <ol>
+            <li>
+                <strong>What is an Index?</strong>:
+                <p>In a database table, an index is like a quick-reference guide that helps the database quickly locate specific rows of data. Instead of scanning through the entire table to find what you're looking for, the database can use the index to jump directly to the relevant rows.</p>
+            </li>
+            <li>
+                <strong>How Does an AVL Tree Help?</strong>:
+                <p>An AVL tree is a type of data structure that's very efficient for organizing and searching data. When used as an index in a DBMS, an AVL tree arranges the values from a specific column in a sorted manner. This allows the database to quickly locate the desired rows based on the values in that column.</p>
+            </li>
+            <li>
+                <strong>Improving Query Performance</strong>:
+                <p>Let's say you have a large database table with thousands or even millions of rows. Without an index, searching for a specific record based on a column value could take a long time because the database would need to scan through all the rows to find it. But with an AVL tree index on that column, the database can search much faster because it can use the AVL tree to locate the desired rows directly, without having to scan through the entire table.</p>
+            </li>
+            <li>
+                <strong>Facilitating Fast Retrieval</strong>:
+                <p>When you execute a query that involves searching for records based on the indexed column, the DBMS can use the AVL tree index to quickly locate those records. This significantly reduces the time it takes to retrieve the data, making your queries run much faster.</p>
+            </li>
+        </ol>
+        <p>In simple terms, AVL trees in a DBMS act like a well-organized filing system, allowing the database to quickly find the information you're looking for without having to search through every single piece of data. This helps improve the overall performance and responsiveness of the database system.</p>
+     <h1>Query Optimization Using Indexes</h1>
+        <p>In the context of query execution and data retrieval, AVL trees (or any other type of index) are used by the database management system (DBMS) to optimize search operations. Here's how AVL trees can be used in the backend process:</p>
+        <ol>
+            <li>
+                <strong>Query Optimization:</strong>
+                <p>During query optimization, the DBMS analyzes the query to determine the most efficient way to retrieve the requested data. If the query involves filtering or searching based on certain criteria (e.g., age, name), the DBMS may consider using indexes to improve performance. If an AVL tree index exists on a column that is being filtered or searched, the DBMS may choose to utilize it in the query execution plan.</p>
+            </li>
+            <li>
+                <strong>Index Utilization:</strong>
+                <p>When an AVL tree index is selected for query optimization, the DBMS incorporates it into the execution plan. For example, if the query includes a condition like "WHERE age = 35," the DBMS may use the AVL tree index on the "age" column to quickly locate records with the specified age value. Instead of performing a full table scan, which can be time-consuming for large datasets, the DBMS traverses the AVL tree index to efficiently find the relevant records.</p>
+            </li>
+            <li>
+                <strong>Data Retrieval:</strong>
+                <p>The DBMS utilizes the AVL tree index to locate the rows that satisfy the query condition. It performs a search operation on the AVL tree to find the keys (in this case, ages) that match the specified condition. Once the matching keys are found, the DBMS retrieves the corresponding records from the database table using the references stored in the AVL tree nodes. This enables the DBMS to retrieve the requested data more quickly and efficiently than without using an index.</p>
+            </li>
+            <li>
+                <strong>Query Execution:</strong>
+                <p>With the help of the AVL tree index, the DBMS executes the query by efficiently retrieving the necessary data. The AVL tree index optimizes the search operation, leading to improved query performance and reduced query execution time. The DBMS may also employ other optimization techniques in conjunction with index usage to further enhance query performance.</p>
+            </li>
+        </ol>
+        <p>Overall, AVL trees (or other types of indexes) play a crucial role in query optimization and data retrieval within a database system. By using AVL trees effectively, the DBMS can improve the efficiency of search operations and provide faster query execution times, resulting in better overall performance for database applications.</p>
+    <h1>AVL Trees in Database Management Systems</h1>
+        <p>The purpose of the code in relation to AVL trees is to demonstrate how AVL trees can be used as an index structure in a database management system (DBMS) to efficiently retrieve and manage data. Here's how the code achieves this:</p>
+        <ol>
+            <li>
+                <strong>AVL Tree Implementation:</strong>
+                <p>The code provides an implementation of an AVL tree data structure. AVL trees are self-balancing binary search trees that maintain a balanced structure, ensuring fast operations such as insertion, deletion, and search.</p>
+            </li>
+            <li>
+                <strong>Database Management System (DBMS):</strong>
+                <p>The code also includes a simple database management system implemented using Python classes. This DBMS maintains an AVL tree index on the age attribute of employee records.</p>
+            </li>
+            <li>
+                <strong>Database Operations:</strong>
+                <p>The DBMS allows users to insert employee records into the database and execute SQL-like queries to retrieve data from the database. When a query is executed, the DBMS uses the AVL tree index to efficiently locate the relevant records.</p>
+            </li>
+            <li>
+                <strong>Query Execution:</strong>
+                <p>The execute_query method in the Database class processes SQL-like queries and retrieves data from the database. Depending on the type of query (e.g., selecting all records, selecting specific attributes, filtering by age), the method returns the appropriate result by utilizing the AVL tree index.</p>
+            </li>
+        </ol>
+
+   <p>Overall, the purpose of the code is to demonstrate how AVL trees can be integrated into a DBMS to improve query performance by facilitating fast retrieval of records based on indexed columns, such as the age of employees in this example.</p>
+     <footer>
+        <p>&copy; 2024 @sudheer debbati. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+
