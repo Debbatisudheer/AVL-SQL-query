@@ -57,11 +57,7 @@ thead th {
     top: 0;
     background-color: #fff;
 }
-pre {
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
+
 
 /* Responsive adjustments */
 @media screen and (max-width: 600px) {
@@ -72,9 +68,5 @@ pre {
     button {
         margin-top: 20px; /* Increased space between input and button */
     }
-    pre {
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
+    
 }
